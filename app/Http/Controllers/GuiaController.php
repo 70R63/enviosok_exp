@@ -317,6 +317,7 @@ class GuiaController extends Controller
             $unique = md5( (string)$carbon);
             $carbon->settings(['toStringFormat' => 'Y-m-d-H-i-s.u']);
             $namePdf = sprintf("%s-%s-%s.pdf",(string)$carbon,$empresa_id,$unique);
+            Log::info(__CLASS__." ".__FUNCTION__." ".__LINE__);
             Storage::disk('public')->put($namePdf,base64_decode($sEstafeta->documento));
 
             $insert = GuiaDTO::estafeta($sEstafeta,$requestInicial,"WEB");

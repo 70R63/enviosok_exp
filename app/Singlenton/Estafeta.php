@@ -312,6 +312,7 @@ class Estafeta {
         Log::info(__CLASS__." ".__FUNCTION__." ".__LINE__." INICIO");
         
 
+        /*
         $empresas = EmpresaEmpresas::where('empresa_id',$empresa_id)->pluck('id')->toArray();
         
         Log::info(__CLASS__." ".__FUNCTION__." ".__LINE__." EmpresaEmpresas");
@@ -319,7 +320,8 @@ class Estafeta {
 
         $ltdCredencial = LtdCredencial::where('ltd_id',2)
                                 ->whereIn('empresa_id',$empresas);
-
+        */
+        $ltdCredencial = LtdCredencial::where('ltd_id',2);
         Log::info(__CLASS__." ".__FUNCTION__." ".__LINE__." LtdCredencial");
         Log::debug(print_r($ltdCredencial->get()->toArray(),true));
                      

@@ -263,7 +263,7 @@ $("#cotizar").click(function(e) {
                 console.log("done");
                 console.log(response.data.data);
 
-                validaSaldo(response)
+                //validaSaldo(response)
                 
 
                 table = $('#cotizacionAjax').DataTable({
@@ -474,7 +474,8 @@ $('#cotizacionAjax tbody').on('click', 'tr', function () {
         $("#anchos").val(anchos);
         $("#altos").val(altos);
 
-
+        console.log("crearPreferencia")
+        crearPreferencia(precioIva,ltd_nombre, servicioNombre);
         $("#myModal").modal("show");
 
     }
@@ -592,7 +593,61 @@ function direccionesPorEmpresa(idSucursa){
     
 }
 
+function crearPreferencia(precioIva,ltd_nombre, servicioNombre){
 
+    var settings = {
+        "url": "https://api.mercadopago.com/checkout/preferences",
+        "method": "POST",
+        "timeout": 0,
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer TEST-6432361439146370-031200-aabe810507db58baa14732da2cc23f34-1717901241"
+          },
+  "data": JSON.stringify({
+    "items": [
+      {
+        "title": ltd_nombre +" - "+servicioNombre,
+        "description": "Dummy description",
+        "picture_url": "http://www.myapp.com/myimage.jpg",
+        "category_id": "car_electronics",
+        "quantity": 1,
+        "currency_id": "MXP",
+        "unit_price": parseFloat(precioIva)
+      }
+    ]
+  }),
+};
+
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+        mp.bricks().create("wallet", "wallet_container", {
+            initialization: {
+               //preferenceId: "150057237-7d260728-3417-423b-aea8-5c9606097842",
+                preferenceId: response.id,
+                redirectMode: "blank"
+            },
+            customization: {
+                texts: {
+                    valueProp: 'smart_option',
+                },
+            },
+        });
+    }).fail( function( data,jqXHR, textStatus, errorThrown ) {
+        console.log( "fail" );
+        console.log(textStatus);
+        
+        swal(
+            "Error!",
+            data.responseJSON.message,
+            "error"
+          )
+
+
+    }).always(function() {
+        console.log( "complete" );
+    });
+    
+}
 
 $("#addRow").click(function () {
     console.log('AddRow')

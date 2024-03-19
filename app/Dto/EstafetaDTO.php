@@ -106,7 +106,8 @@ class EstafetaDTO
         Log::debug(__CLASS__." ".__FUNCTION__." ".__LINE__." INICIO");
 
         $this->ltdTipoServicio = LtdTipoServicio::where('service_id',$data['servicio_id'])
-            ->where('ltd_id',2)->whereIN('empresa_id',$empresas)
+            ->where('ltd_id',2)
+            //->whereIN('empresa_id',$empresas)
             ->where('estatus',1)
             ->first()
             
