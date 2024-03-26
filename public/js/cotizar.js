@@ -394,10 +394,9 @@ $('#cotizacionAjax tbody').on('click', 'tr', function () {
         var areaExtendida  = dataRow['extendida_cobertura'];
         var zona  = dataRow['zona'];
         var costoBase  = dataRow['costo'];
-        //var kgExtra  = dataRow['kg_extra'];
 
         //valores para el modal resumen_cotizacion.blade
-        $("#spanPrecio").text( precioIva );
+        $(".spanPrecio").text( precioIva );
         $("#spanMensajeria").text(ltd_nombre);
         $("#spanservicioId").text(servicioNombre);
         $("#spanRemitente").text(cp);
@@ -474,9 +473,20 @@ $('#cotizacionAjax tbody').on('click', 'tr', function () {
         $("#anchos").val(anchos);
         $("#altos").val(altos);
 
+        var saldoPorEmpresa = document.getElementById("spanSaldoPorEmpresa").innerText;
+        console.error(saldoPorEmpresa)
+
         console.log("crearPreferencia")
         crearPreferencia(precioIva,ltd_nombre, servicioNombre);
-        $("#myModal").modal("show");
+        $("#myModalMercadoPago").modal("show");
+        //$("#myModal").modal("show");
+        if (saldoPorEmpresa < 0) {
+
+        } else {
+
+        }
+        
+        
 
     }
     
@@ -595,42 +605,83 @@ function direccionesPorEmpresa(idSucursa){
 
 function crearPreferencia(precioIva,ltd_nombre, servicioNombre){
 
+    const mp = new MercadoPago('TEST-ee7e0c16-35b1-4cd2-b742-56da4a3eccce',
+            {locale: "es-MX"}
+        );
+    const bricksBuilder = mp.bricks();
+
+        
+    element = document.getElementById("wallet_container");
+    element.remove(); // Elimina el div con el id 'div-02'
+
+    $('#mercadopago').append('<div id="wallet_container"></div>');
+
     var settings = {
         "url": "https://api.mercadopago.com/checkout/preferences",
         "method": "POST",
         "timeout": 0,
           "headers": {
             "Content-Type": "application/json",
-            "Authorization": "Bearer TEST-6432361439146370-031200-aabe810507db58baa14732da2cc23f34-1717901241"
+            "Authorization": "Bearer TEST-4198938082880779-032602-a9f12f338449b61fac78b09778fef4c7-150057237"
           },
-  "data": JSON.stringify({
-    "items": [
-      {
-        "title": ltd_nombre +" - "+servicioNombre,
-        "description": "Dummy description",
-        "picture_url": "http://www.myapp.com/myimage.jpg",
-        "category_id": "car_electronics",
-        "quantity": 1,
-        "currency_id": "MXP",
-        "unit_price": parseFloat(precioIva)
-      }
-    ]
-  }),
-};
+        "data": JSON.stringify({
+            "items": [
+              {
+                "title": ltd_nombre +" - "+servicioNombre,
+                "description": ltd_nombre +" - "+servicioNombre,
+                "picture_url": "http://www.myapp.com/myimage.jpg",
+                "category_id": "car_electronics",
+                "quantity": 1,
+                "currency_id": "MXP",
+                "unit_price": parseFloat(precioIva)
+              }
+            ],
+            "payment_methods": {
+                "excluded_payment_methods": [
+                    {
+                        id: "amex"
+                    },
+                    {
+                        id: "debmaster"
+                    }
+                ],
+                "excluded_payment_types": [
+                    {
+                        id: "ticket"
+                    }
+                ]
+            },
+            installments: 1,
+            auto_return: "approved",
+            back_urls: {
+                success: "http://local.enviosok.com/dashboard",
+                failure: "http://local.enviosok.com/dashboard",
+                pending: "https://www.tu-sitio/pendings"
+            },
+        }),
+    };
 
     $.ajax(settings).done(function (response) {
         console.log(response);
         mp.bricks().create("wallet", "wallet_container", {
             initialization: {
-               //preferenceId: "150057237-7d260728-3417-423b-aea8-5c9606097842",
                 preferenceId: response.id,
-                redirectMode: "blank"
+                redirectMode: "self"
             },
             customization: {
                 texts: {
                     valueProp: 'smart_option',
                 },
+                visual:{
+                    borderRadius: '6px',
+                    verticalPadding : '8px',
+
+                }
             },
+            callbacks: {
+                onError: (error) => console.error(error),
+                onReady: () => console.error("onReady")
+            }
         });
     }).fail( function( data,jqXHR, textStatus, errorThrown ) {
         console.log( "fail" );

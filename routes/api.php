@@ -14,6 +14,7 @@ use App\Http\Controllers\API\ClienteController;
 use App\Http\Controllers\API\ReportesController;
 use App\Http\Controllers\API\Reportes\RepesajeController;
 use App\Http\Controllers\API\Saldos\PagosController;
+use App\Http\Controllers\API\Saldos\SaldosController;
 use App\Http\Controllers\API\Reportes\PagosController as ReportesPagoController;
 use App\Http\Controllers\API\Ltd\FedexController;
 use App\Http\Controllers\API\Ltd\EstafetaController;
@@ -191,6 +192,11 @@ Route::middleware(['throttle:100,1','auth'])->group(function () {
 
             Route::controller(PagosController::class)->group(function(){
                 Route::get('pagos/{empresa_id}', 'tablaPagos')->name("pagos");
+
+            });
+
+            Route::controller(SaldosController::class)->group(function(){
+                Route::get('empresas', 'porEmpresa')->name("empresas");
 
             });
 

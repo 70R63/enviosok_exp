@@ -7,9 +7,7 @@
     //const mp = new MercadoPago('TEST-21790bfd-c517-494f-a444-ef70f555a49b');
     //const bricksBuilder = mp.bricks();
 </script>
-<div class="modal" id="myModal">
-
-{!! Form::open([ 'route' => 'cotizaciones.create', 'method' => 'GET' , 'class'=>'parsley-style-1', 'id'=>'generalForm' ]) !!}
+<div class="modal" id="myModalMercadoPago">
 
     <div class="modal-dialog" role="document">
         <div class="modal-content modal-content-demo">
@@ -28,7 +26,7 @@
                     </div>
                     <div class="pricing-plans  bg-primary">
                         <span class="price-value1">
-                            $<span id="spanPrecio"></span> MXP
+                            $<span id="spanPrecio" class="spanPrecio"></span> MXP
                         </span>
                     </div>
                     <div class="pricingContent2">
@@ -71,7 +69,8 @@
                 </div>
                 <div class="modal-footer">
 
-                    <button type="submit" class="btn btn-primary ml-3" >Continuar</button>
+                    <div id="wallet_container">Elimianr previo </div>
+                    <div id="mercadopago"></div>
                     <a class="btn badge-dark" data-dismiss="modal" type="button">Cerrar</a>
                     
                 </div>
@@ -82,6 +81,6 @@
 
 
 @include('cotizaciones.forma.guiastore_ocultos')
-{!! Form::close() !!} 
+
 
 </div>

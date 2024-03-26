@@ -91,4 +91,5 @@
     </div>
 </div>
 @include('cotizaciones.modals.resumen_cotizacion')
+@include('cotizaciones.modals.resumen_cotizacion_mercadoPago')
 @endsection

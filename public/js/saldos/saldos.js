@@ -21,12 +21,12 @@ function initAjaxSaldoPorEmpresa(){
         console.log(response.data);
         var saldo = response.data
         
-        $("#spanSaldoPorEmpresa").text( "$"+saldo );
+        $("#spanSaldoPorEmpresa").text(saldo );
          
         if (saldo<0) {
-            $("#spanSaldoPorEmpresa").addClass("badge-danger");
+            $("#spanBadge").addClass("badge-danger");
         } else {
-            $("#spanSaldoPorEmpresa").addClass("badge-success");
+            $("#spanBadge").addClass("badge-success");
         }
         
             
@@ -45,11 +45,10 @@ function initAjaxSaldoPorEmpresa(){
     });
 
 }
-/*
+
 var intervalId = window.setInterval(function(){
     
-    initAjaxSaldoPorEmpresa()
+    //initAjaxSaldoPorEmpresa()
     
 
 }, 10000);
-*/
